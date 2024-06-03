@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using Domain.Models;
+﻿using Domain.Models;
 using Domain.Models.Entities;
-using Domain.Models.Responses;
 using Infrastructure.Context;
 using Infrastructure.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -11,15 +9,13 @@ namespace Infrastructure.Repositories.Implementations;
 public class ProductRepository : IProductRepository
 {
     private readonly AppDbContext _db;
-    private readonly IMapper _mapper;
 
-    public ProductRepository(AppDbContext db, IMapper mapper)
+    public ProductRepository(AppDbContext db)
     {
         _db = db;
-        _mapper = mapper;
     }
 
-    public async Task<PaginatedList<GetProductResponse>> GetPaginatedAsync(int pageIndex, int pageSize)
+    public async Task<PaginatedList<Product>> GetPaginatedAsync(int pageIndex, int pageSize)
     {
         var totalProducts = await _db.Products.CountAsync();
         var products = await _db.Products
@@ -28,9 +24,7 @@ public class ProductRepository : IProductRepository
             .Take(pageSize)
             .ToListAsync();
 
-        var productDtos = _mapper.Map<List<GetProductResponse>>(products); 
-
-        return new PaginatedList<GetProductResponse>(productDtos, pageIndex, (int)Math.Ceiling(totalProducts / (double)pageSize));
+        return new PaginatedList<Product>(products, pageIndex, (int)Math.Ceiling(totalProducts / (double)pageSize));
     }
 
     public async Task<Product?> GetByIdAsync(int id)
@@ -48,7 +42,7 @@ public class ProductRepository : IProductRepository
         return addedProduct.Entity;
     }
 
-    public async Task<Product?> UpdateAsync(int id, Product updatedProductRequest, List<Category>? newCategories)
+    public async Task<Product?> UpdateAsync(int id, Product updatedProduct, List<Category>? newCategories)
     {
         var existingProduct = await GetByIdAsync(id);
 
@@ -56,8 +50,8 @@ public class ProductRepository : IProductRepository
         {
             _db.Products.Attach(existingProduct); 
 
-            existingProduct.Name = updatedProductRequest.Name;
-            existingProduct.Price = updatedProductRequest.Price;
+            existingProduct.Name = updatedProduct.Name;
+            existingProduct.Price = updatedProduct.Price;
 
             if (newCategories != null)
             {

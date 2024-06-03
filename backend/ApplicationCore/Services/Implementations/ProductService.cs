@@ -4,7 +4,6 @@ using AutoMapper;
 using Domain.Models;
 using Domain.Models.Entities;
 using Domain.Models.Requests;
-using Domain.Models.Responses;
 using Infrastructure.Repositories.Interfaces;
 
 namespace ApplicationCore.Services.Implementations;
@@ -22,18 +21,18 @@ public class ProductService : IProductService
         _mapper = mapper;
     }
 
-    public async Task<PaginatedList<GetProductResponse>> GetPaginatedProductsAsync(int pageIndex, int pageSize)
+    public async Task<PaginatedList<Product>> GetPaginatedProductsAsync(int pageIndex, int pageSize)
     {
         var products = await _productRepository.GetPaginatedAsync(pageIndex, pageSize);
         return products;
     }
 
-    public async Task<GetProductResponse> GetProductByIdAsync(int id)
+    public async Task<Product?> GetProductByIdAsync(int id)
     {
         var product = await _productRepository.GetByIdAsync(id);
         if (product != null)
         {
-            return _mapper.Map<GetProductResponse>(product);
+            return product;
         }
 
         throw new NotFoundException("Product not found.");
@@ -55,8 +54,8 @@ public class ProductService : IProductService
         }
 
         var productToUpdate = _mapper.Map<Product>(updateProductRequest);
+        
         var updatedProduct = await _productRepository.UpdateAsync(id, productToUpdate, categories);
-
         if (updatedProduct != null)
         {
             return updatedProduct;

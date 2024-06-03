@@ -33,7 +33,7 @@ public class ProductController : ControllerBase
     public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest createProductRequest)
     {
         var newProduct = await _productService.CreateProductAsync(createProductRequest);
-        return Ok(newProduct);
+        return CreatedAtAction(nameof(CreateProduct), newProduct);
     }
 
     [HttpPut("{id}")]
