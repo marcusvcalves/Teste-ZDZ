@@ -9,6 +9,8 @@ using Infrastructure.Mappings;
 using Infrastructure.Repositories.Implementations;
 using Infrastructure.Repositories.Interfaces;
 
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -41,6 +43,15 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy  =>
+                      {
+                          policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+                      });
+});
+
 var app = builder.Build();
 
 app.UseExceptionHandler(o => { });
@@ -51,6 +62,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 app.MapControllers();

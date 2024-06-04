@@ -52,6 +52,7 @@ public class ProductRepository : IProductRepository
 
             existingProduct.Name = updatedProduct.Name;
             existingProduct.Price = updatedProduct.Price;
+            existingProduct.Description = updatedProduct.Description;
 
             if (newCategories != null)
             {
