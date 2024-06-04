@@ -3,6 +3,11 @@ export interface Product{
   name: string,
   price: number,
   description: string
+  category: Category,
+  pageIndex: number,
+  totalPages: number,
+  hasPreviousPage: boolean,
+  hasNextPage: boolean
 }
 
 export interface Category{

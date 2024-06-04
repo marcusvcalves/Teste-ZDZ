@@ -5,6 +5,19 @@
     <v-card-subtitle class="text-h6">{{ formatPrice(product.price) }}</v-card-subtitle>
 
     <v-card-text>{{ product.description }}</v-card-text>
+    
+    <v-card-text class="d-flex flex-wrap"> 
+      <v-btn
+        v-for="category in product.categories"
+        :key="category.id"
+        variant="flat"
+        color="teal"
+        size="small"
+        class="category-btn mr-2 mt-2"  
+      >
+        {{ category.name }}
+      </v-btn>
+    </v-card-text>
 
     <v-card-actions>
       <v-btn color="primary" variant="flat" class="ml-2 mb-6">

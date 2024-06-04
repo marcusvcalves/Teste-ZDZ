@@ -14,14 +14,32 @@
         </v-col>
       </v-row>
     </v-main>
+    <Pagination 
+      :currentPage="currentPage" 
+      :totalPages="totalPages"
+      @page-change="changePage" 
+    />
   </v-app>
 </template>
 
 <script setup>
 import { useMainStore } from '@/store/index';
+import { computed, onMounted } from 'vue';
 import SearchBar from '@/components/SearchBar.vue';
 import Card from '@/components/Card.vue';
+import Pagination from '@/components/Pagination.vue';
 
 const store = useMainStore();
-const products = store.products;
+
+const products = computed(() => store.getProducts);
+const currentPage = computed(() => store.pageIndex);
+const totalPages = computed(() => store.totalPages);
+
+onMounted(() => {
+  store.fetchProducts();
+});
+
+const changePage = (newPage) => {
+  store.changePage(newPage);
+};
 </script>

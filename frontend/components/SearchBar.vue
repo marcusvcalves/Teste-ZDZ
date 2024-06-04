@@ -1,5 +1,5 @@
 <template>
-    <v-app-bar color="#0D5CD2" height="80"> 
+    <v-app-bar color="primary" height="80"> 
       <v-container>
         <v-text-field
           class="mx-auto"
