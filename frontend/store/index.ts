@@ -28,6 +28,21 @@ export const useMainStore = defineStore("main", {
         console.log(error);
       }
     },
+    async createProduct(req: Object){
+      try {
+        await axios.post("http://localhost:8080/api/products", req);
+      } catch (error) {
+        console.log(error);
+      }
+
+    },
+    async deleteProduct(productId: String){
+      try {
+        await axios.delete(`http://localhost:8080/api/products/${productId}`);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     changePage(newPage: number) {
       this.fetchProducts(newPage);
     },

@@ -1,6 +1,11 @@
 <template>
   <v-card class="mx-auto" max-width="400" min-height="300" elevation="2">
-    <v-card-title>{{ product.name }}</v-card-title>
+    <v-row class="d-flex align-start justify-space-between mt-1 mr-1">
+      <v-card-title>{{ product.name }}</v-card-title>
+      <v-spacer></v-spacer>
+      <ProductButtons :id="product.id"/>
+    </v-row>
+    
 
     <v-card-subtitle class="text-h6">{{ formatPrice(product.price) }}</v-card-subtitle>
 
