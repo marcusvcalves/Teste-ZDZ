@@ -8,7 +8,7 @@ const emit = defineEmits(['edit']);
 
 const props = defineProps({
   id: {
-    type: String,
+    type: Number,
     required: true
   }});
 

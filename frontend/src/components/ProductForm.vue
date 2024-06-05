@@ -11,6 +11,12 @@ const props = defineProps({
 
 const emit = defineEmits(['update:show']);
 
+const showDialog = ref(props.show);
+
+watch(() => props.show, (newShowValue) => {
+  showDialog.value = newShowValue;
+});
+
 const product = ref({
   name: '',
   price: '',
@@ -62,12 +68,13 @@ bus.on(async () => {
   categories.value = await store.fetchCategories();
 });
 
-watch(props, (newProps) => {
-  if (!newProps.show) {
+watch(showDialog, (newShowValue) => {
+  if (!newShowValue) {
     clearForm();
   }
 });
 </script>
+
 
 <template>
   <v-dialog :model-value="show" @update:model-value="updateShow" max-width="500px">

@@ -27,11 +27,12 @@ const save = async () => {
   close();
 };
 
-watch(props, (newProps) => {
-  if (!newProps.show) {
-    category.value.name = '';
-  }
+const showDialog = ref(props.show);
+
+watch(() => props.show, (newShowValue) => {
+  showDialog.value = newShowValue;
 });
+
 </script>
 
 <template>
