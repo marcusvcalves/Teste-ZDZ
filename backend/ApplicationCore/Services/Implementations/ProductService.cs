@@ -21,9 +21,9 @@ public class ProductService : IProductService
         _mapper = mapper;
     }
 
-    public async Task<PaginatedList<Product>> GetPaginatedProductsAsync(int pageIndex, int pageSize)
+    public async Task<PaginatedList<Product>> GetPaginatedProductsAsync(int pageIndex, int pageSize, string search)
     {
-        var products = await _productRepository.GetPaginatedAsync(pageIndex, pageSize);
+        var products = await _productRepository.GetPaginatedAsync(pageIndex, pageSize, search);
         return products;
     }
 

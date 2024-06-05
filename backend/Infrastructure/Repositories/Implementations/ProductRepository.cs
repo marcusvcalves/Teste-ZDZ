@@ -15,11 +15,17 @@ public class ProductRepository : IProductRepository
         _db = db;
     }
 
-    public async Task<PaginatedList<Product>> GetPaginatedAsync(int pageIndex, int pageSize)
+    public async Task<PaginatedList<Product>> GetPaginatedAsync(int pageIndex, int pageSize, string search = "")
     {
-        var totalProducts = await _db.Products.CountAsync();
-        var products = await _db.Products
-            .Include(p => p.Categories)
+        var query = _db.Products.Include(p => p.Categories).AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(p => p.Name.ToLower().Contains(search.ToLower()));
+        }
+
+        var totalProducts = await query.CountAsync();
+        var products = await query
             .Skip((pageIndex - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();

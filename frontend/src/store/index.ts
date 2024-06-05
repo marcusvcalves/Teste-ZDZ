@@ -18,9 +18,9 @@ export const useMainStore = defineStore("main", {
     },
   },
   actions: {
-    async fetchProducts(pageIndex = 1, pageSize = 6) {
+    async fetchProducts(pageIndex = 1, pageSize = 6, searchQuery="") {
       try {
-        const response = await axios.get(`http://localhost:8080/api/products?pageIndex=${pageIndex}&pageSize=${pageSize}`);
+        const response = await axios.get(`http://localhost:8080/api/products?pageIndex=${pageIndex}&pageSize=${pageSize}&search=${searchQuery}`);
         const data = response.data;
         this.products = data.items;
         this.pageIndex = data.pageIndex;
@@ -68,8 +68,8 @@ export const useMainStore = defineStore("main", {
         console.log(error);
       }
     },
-    changePage(newPage: number) {
-      this.fetchProducts(newPage);
+    changePage(newPage: number, searchQuery = "") {
+      this.fetchProducts(newPage, 6, searchQuery);
     },
   },
 });

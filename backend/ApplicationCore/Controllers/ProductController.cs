@@ -21,12 +21,13 @@ public class ProductController : ControllerBase
     /// </summary>
     /// <param name="pageIndex"></param>
     /// <param name="pageSize"></param>
+    /// <param name="search"></param>
     /// <response code="200">Lista paginada com os produtos</response>
     [ProducesResponseType(typeof(PaginatedList<Product>), 200)]
     [HttpGet]
-    public async Task<IActionResult> GetPaginatedProducts([FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10)
+    public async Task<IActionResult> GetPaginatedProducts([FromQuery] int pageIndex = 1, [FromQuery] int pageSize = 10, [FromQuery] string search = "")
     {
-        var products = await _productService.GetPaginatedProductsAsync(pageIndex, pageSize);
+        var products = await _productService.GetPaginatedProductsAsync(pageIndex, pageSize, search);
         return Ok(products);
     }
 

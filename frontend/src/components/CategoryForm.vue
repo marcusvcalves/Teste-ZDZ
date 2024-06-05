@@ -56,5 +56,3 @@ watch(() => props.show, (newShowValue) => {
     </v-card>
   </v-dialog>
 </template>
-
-
