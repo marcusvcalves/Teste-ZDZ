@@ -1,12 +1,21 @@
 <script setup>
-import { ref, defineProps, defineEmits, watch, watchEffect } from 'vue';
+import { ref, defineProps, defineEmits, watch } from 'vue';
 import { useMainStore } from '@/store/index';
 import { useEventBus } from '@vueuse/core';
 
 const store = useMainStore();
 
 const props = defineProps({
-  show: Boolean
+  show: Boolean,
+  product: {
+    type: Object,
+    default: () => ({
+      name: '',
+      price: '',
+      description: '',
+      categoriesIds: []
+    })
+  }
 });
 
 const emit = defineEmits(['update:show']);
@@ -17,17 +26,13 @@ watch(() => props.show, (newShowValue) => {
   showDialog.value = newShowValue;
 });
 
-const product = ref({
-  name: '',
-  price: '',
-  description: '',
-  categoriesIds: []
-});
+const product = ref({ ...props.product });
 
-const selectedCategoriesIds = ref([]);
+const selectedCategoriesIds = ref(product.value.categoriesIds);
 
 const updateSelectedCategories = (selectedIds) => {
   selectedCategoriesIds.value = selectedIds;
+  product.value.categoriesIds = selectedIds;
 };
 
 const updateShow = (value) => {
@@ -35,9 +40,12 @@ const updateShow = (value) => {
 };
 
 const clearForm = () => {
-  product.value.name = '';
-  product.value.price = '';
-  product.value.description = '';
+  product.value = {
+    name: '',
+    price: '',
+    description: '',
+    categoriesIds: []
+  };
   selectedCategoriesIds.value = [];
 };
 
@@ -47,7 +55,11 @@ const close = () => {
 
 const save = async () => {
   try {
-    await store.createProduct(product.value);
+    if (props.product.id) {
+      await store.updateProduct(props.product.id, product.value);
+    } else {
+      await store.createProduct(product.value);
+    }
     await store.fetchProducts();
     close();
     clearForm();
@@ -73,11 +85,15 @@ watch(showDialog, (newShowValue) => {
     clearForm();
   }
 });
+
+watch(() => props.product, (newProduct) => {
+  product.value = { ...newProduct };
+  selectedCategoriesIds.value = newProduct.categoriesIds;
+});
 </script>
 
-
 <template>
-  <v-dialog :model-value="show" @update:model-value="updateShow" max-width="500px">
+  <v-dialog :model-value="showDialog" @update:model-value="updateShow" max-width="500px">
     <v-card>
       <v-btn class="ml-auto" icon @click="close">
         <v-icon>mdi-close</v-icon>

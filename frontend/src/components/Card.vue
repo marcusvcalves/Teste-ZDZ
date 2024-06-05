@@ -1,5 +1,8 @@
 <script setup>
+import { ref } from 'vue';
 import { defineProps } from 'vue';
+import ProductButtons from './ProductButtons.vue';
+import ProductForm from './ProductForm.vue';
 
 const props = defineProps({
   product: {
@@ -8,19 +11,26 @@ const props = defineProps({
   },
 });
 
+const showForm = ref(false);
+const selectedProduct = ref({});
+
+const openEditForm = (product) => {
+  selectedProduct.value = { ...product };
+  showForm.value = true;
+}
+
 function formatPrice(price) {
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price);
 }
-</script> 
+</script>
 
 <template>
   <v-card class="mx-auto" max-width="400" min-height="300" elevation="2">
     <v-row class="d-flex align-start justify-space-between mt-1 mr-1">
       <v-card-title>{{ product.name }}</v-card-title>
       <v-spacer></v-spacer>
-      <ProductButtons :id="product.id"/>
+      <ProductButtons :product="product" @edit="openEditForm" />
     </v-row>
-    
 
     <v-card-subtitle class="text-h6">{{ formatPrice(product.price) }}</v-card-subtitle>
 
@@ -33,7 +43,7 @@ function formatPrice(price) {
         variant="flat"
         color="teal"
         size="small"
-        class="category-btn mr-2 mt-2"  
+        class="category-btn mr-2 mt-2"
       >
         {{ category.name }}
       </v-btn>
@@ -46,5 +56,6 @@ function formatPrice(price) {
     </v-card-actions>
     
   </v-card>
-</template>
 
+  <ProductForm :show="showForm" :product="selectedProduct" @update:show="showForm = $event" />
+</template>

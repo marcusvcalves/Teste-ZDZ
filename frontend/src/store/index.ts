@@ -37,6 +37,13 @@ export const useMainStore = defineStore("main", {
       }
 
     },
+    async updateProduct(id: Number, req: Object){
+      try {
+        await axios.put(`http://localhost:8080/api/products/${id}`, req);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async deleteProduct(productId: String){
       try {
         await axios.delete(`http://localhost:8080/api/products/${productId}`);

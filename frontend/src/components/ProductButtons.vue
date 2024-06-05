@@ -7,32 +7,37 @@ const store = useMainStore();
 const emit = defineEmits(['edit']);
 
 const props = defineProps({
-  id: {
-    type: Number,
+  product: {
+    type: Object,
     required: true
-  }});
+  }
+});
 
-const deleteProduct = (productId) =>{
+const deleteProduct = (productId) => {
   store.deleteProduct(productId)
     .then(() => {
       store.fetchProducts();
     })
     .catch(error => {
-      console.error('Erro ao deletar o produto:', error);
+      console.log(error);
     });
-}
+};
+
+const editProduct = () => {
+  emit('edit', props.product);
+};
 </script>
 
 <template>
-    <v-col cols="auto">
-      <v-btn color="primary" @click="edit">
-        <v-icon>mdi-pencil</v-icon>
-      </v-btn>
-    </v-col>
+  <v-col cols="auto">
+    <v-btn color="primary" @click="editProduct">
+      <v-icon>mdi-pencil</v-icon>
+    </v-btn>
+  </v-col>
 
-    <v-col cols="auto">
-      <v-btn color="red" @click="deleteProduct(id)">
-        <v-icon>mdi-delete</v-icon>
-      </v-btn>
-    </v-col>
+  <v-col cols="auto">
+    <v-btn color="red" @click="deleteProduct(product.id)">
+      <v-icon>mdi-delete</v-icon>
+    </v-btn>
+  </v-col>
 </template>
