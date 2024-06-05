@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { useEventBus } from '@vueuse/core'; 
 import axios from "axios";
 
 export const useMainStore = defineStore("main", {
@@ -39,6 +40,23 @@ export const useMainStore = defineStore("main", {
     async deleteProduct(productId: String){
       try {
         await axios.delete(`http://localhost:8080/api/products/${productId}`);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async fetchCategories() {
+      try {
+        const response = await axios.get('http://localhost:8080/api/categories');
+        return response.data;
+      } catch (error) {
+        console.log(error);
+        return [];
+      }
+    },
+    async createCategory(req: Object){
+      try {
+        await axios.post("http://localhost:8080/api/categories", req);
+        useEventBus('category-created').emit();
       } catch (error) {
         console.log(error);
       }

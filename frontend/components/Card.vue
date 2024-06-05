@@ -1,3 +1,18 @@
+<script setup>
+import { defineProps } from 'vue';
+
+const props = defineProps({
+  product: {
+    type: Object,
+    required: true,
+  },
+});
+
+function formatPrice(price) {
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price);
+}
+</script> 
+
 <template>
   <v-card class="mx-auto" max-width="400" min-height="300" elevation="2">
     <v-row class="d-flex align-start justify-space-between mt-1 mr-1">
@@ -33,17 +48,3 @@
   </v-card>
 </template>
 
-<script setup>
-import { defineProps } from 'vue';
-
-const props = defineProps({
-  product: {
-    type: Object,
-    required: true,
-  },
-});
-
-function formatPrice(price) {
-  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(price);
-}
-</script> 

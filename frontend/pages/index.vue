@@ -1,3 +1,22 @@
+<script setup>
+import { useMainStore } from '@/store/index';
+import { computed, onMounted } from 'vue';
+
+const store = useMainStore();
+
+const products = computed(() => store.getProducts);
+const currentPage = computed(() => store.pageIndex);
+const totalPages = computed(() => store.totalPages);
+
+onMounted(() => {
+  store.fetchProducts();
+});
+
+const changePage = (newPage) => {
+  store.changePage(newPage);
+};
+</script>
+
 <template>
   <v-app>
     <SearchBar />
@@ -27,21 +46,3 @@
   </v-app>
 </template>
 
-<script setup>
-import { useMainStore } from '@/store/index';
-import { computed, onMounted } from 'vue';
-
-const store = useMainStore();
-
-const products = computed(() => store.getProducts);
-const currentPage = computed(() => store.pageIndex);
-const totalPages = computed(() => store.totalPages);
-
-onMounted(() => {
-  store.fetchProducts();
-});
-
-const changePage = (newPage) => {
-  store.changePage(newPage);
-};
-</script>

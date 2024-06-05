@@ -1,32 +1,3 @@
-<template>
-  <div v-if="totalPages > 1" class="pagination">
-    <v-btn variant="flat" color="primary" @click="setCurrentPage(1)" :disabled="currentPage === 1">
-      Primeira
-    </v-btn>
-    <v-btn variant="flat" color="primary" @click="setCurrentPage(currentPage - 1)" :disabled="currentPage === 1">
-      Anterior
-    </v-btn>
-
-    <v-btn
-      v-for="pageNumber in visiblePages"
-      :key="pageNumber"
-      @click="setCurrentPage(pageNumber)"
-      :class="{ active: pageNumber === currentPage }"
-      variant="flat"
-      color="primary"
-    >
-      {{ pageNumber }}
-    </v-btn>
-
-    <v-btn variant="flat" color="primary" @click="setCurrentPage(currentPage + 1)" :disabled="currentPage === totalPages">
-      Próxima
-    </v-btn>
-    <v-btn variant="flat" color="primary" @click="setCurrentPage(totalPages)" :disabled="currentPage === totalPages">
-      Última
-    </v-btn>
-  </div>
-</template>
-
 <script setup>
 import { computed } from 'vue';
 import { defineProps, defineEmits } from 'vue';
@@ -56,6 +27,35 @@ const setCurrentPage = (newPage) => {
   }
 };
 </script>
+
+<template>
+  <div v-if="totalPages > 1" class="pagination">
+    <v-btn variant="flat" color="primary" @click="setCurrentPage(1)" :disabled="currentPage === 1">
+      Primeira
+    </v-btn>
+    <v-btn variant="flat" color="primary" @click="setCurrentPage(currentPage - 1)" :disabled="currentPage === 1">
+      Anterior
+    </v-btn>
+
+    <v-btn
+      v-for="pageNumber in visiblePages"
+      :key="pageNumber"
+      @click="setCurrentPage(pageNumber)"
+      :class="{ active: pageNumber === currentPage }"
+      variant="flat"
+      color="primary"
+    >
+      {{ pageNumber }}
+    </v-btn>
+
+    <v-btn variant="flat" color="primary" @click="setCurrentPage(currentPage + 1)" :disabled="currentPage === totalPages">
+      Próxima
+    </v-btn>
+    <v-btn variant="flat" color="primary" @click="setCurrentPage(totalPages)" :disabled="currentPage === totalPages">
+      Última
+    </v-btn>
+  </div>
+</template>
 
 <style scoped>
 .pagination {

@@ -1,3 +1,39 @@
+<script setup>
+import { ref, defineProps, defineEmits, watch } from 'vue';
+import { useMainStore } from '@/store/index';
+
+const store = useMainStore();
+
+const props = defineProps({
+  show: Boolean
+});
+
+const emit = defineEmits(['update:show']);
+
+const category = ref({
+  name: ''
+});
+
+const updateShow = (value) => {
+  emit('update:show', value);
+};
+
+const close = () => {
+  emit('update:show', false);
+};
+
+const save = async () => {
+  await store.createCategory(category.value);
+  close();
+};
+
+watch(props, (newProps) => {
+  if (!newProps.show) {
+    category.value.name = '';
+  }
+});
+</script>
+
 <template>
   <v-dialog :model-value="show" @update:model-value="updateShow" max-width="500px">
     <v-card>
@@ -20,37 +56,4 @@
   </v-dialog>
 </template>
 
-<script setup>
-import { ref, defineProps, defineEmits, watch } from 'vue';
-import axios from "axios";
 
-const props = defineProps({
-  show: Boolean
-});
-
-const emit = defineEmits(['update:show']);
-
-const category = ref({
-  name: ''
-});
-
-const updateShow = (value) => {
-  emit('update:show', value);
-};
-
-const close = () => {
-  emit('update:show', false);
-};
-
-const save = async () => {
-  const response = await axios.post("http://localhost:8080/api/categories", category.value);
-  
-  close();
-};
-
-watch(props, (newProps) => {
-  if (!newProps.show) {
-    category.value.name = '';
-  }
-});
-</script>

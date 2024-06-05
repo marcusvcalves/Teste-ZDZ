@@ -1,3 +1,12 @@
+<script setup>
+import { ref } from 'vue';
+import ProductForm from './ProductForm.vue';
+import CategoryForm from './CategoryForm.vue';
+
+const showProductModal = ref(false);
+const showCategoryModal = ref(false);
+</script>
+
 <template>
   <v-row>
     <v-col cols="auto">
@@ -15,12 +24,3 @@
     <CategoryForm v-model:show="showCategoryModal" />
   </v-row>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-import ProductForm from './ProductForm.vue';
-import CategoryForm from './CategoryForm.vue';
-
-const showProductModal = ref(false);
-const showCategoryModal = ref(false);
-</script>
